@@ -1,0 +1,8 @@
+.idea/
+vendor/
+config/config.php
+sftp-config.json
+.htaceess
+.editorconfig
+/cache/
+/config/development/
