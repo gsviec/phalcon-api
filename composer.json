@@ -1,7 +1,8 @@
 {
     "require": {
         "bshaffer/oauth2-server-php": "~1.8",
-        "league/fractal": "^0.13.0"
+        "league/fractal": "^0.13.0",
+        "mongodb/mongodb": "^1.1"
     },
     "require-dev": {
         "behat/behat": "~3.0.4",

@@ -100,6 +100,12 @@ $di->set(
     true // shared
 );
 
+$di->setShared('mongo', function () {
+    $config = $this->getConfig();
+
+    return new \MongoDB\Client($config->mongodb->uri);
+});
+
 $di->set(
     'cookies',
     function () {

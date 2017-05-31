@@ -11,7 +11,7 @@ use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use League\Fractal\Pagination\Cursor;
 use App\Responses\JsonResponse;
-use App\Models\Api\ModelBase;
+use App\Models\ModelBase;
 use League\Fractal\Pagination\PhalconFrameworkPaginatorAdapter;
 use App\Auth\Request as OAuth2Request;
 
@@ -208,17 +208,18 @@ class ControllerBase extends Controller
     /**
      * Generates a Response with a 403 HTTP header and a given message.
      *
-     * @return Response
+     * @return JsonResponse
      */
     public function errorForbidden($message = 'Forbidden')
     {
-        return $this->setStatusCode(403)->respondWithError($message, self::CODE_FORBIDDEN);
+        return $this->setStatusCode(403)
+            ->respondWithError($message, self::CODE_FORBIDDEN);
     }
 
     /**
      * Generates a Response with a 500 HTTP header and a given message.
      *
-     * @return Response
+     * @return JsonResponse
      */
     public function errorInternalError($message = 'Internal Error')
     {
@@ -228,7 +229,7 @@ class ControllerBase extends Controller
     /**
      * Generates a Response with a 404 HTTP header and a given message.
      *
-     * @return Response
+     * @return JsonResponse
      */
     public function errorNotFound($message = 'Resource Not Found')
     {
@@ -238,7 +239,7 @@ class ControllerBase extends Controller
     /**
      * Generates a Response with a 401 HTTP header and a given message.
      *
-     * @return Response
+     * @return JsonResponse
      */
     public function errorUnauthorized($message = 'Unauthorized')
     {
@@ -249,7 +250,7 @@ class ControllerBase extends Controller
     /**
      * Generates a Response with a 400 HTTP header and a given message.
      *
-     * @return Response
+     * @return JsonResponse
      */
     public function errorWrongArgs($message = 'Wrong Arguments')
     {
@@ -259,7 +260,7 @@ class ControllerBase extends Controller
     /**
      * Generates a Response with a 400 HTTP header and a given message.
      *
-     * @return Response
+     * @return JsonResponse
      */
     public function errorWrongData($message = 'Wrong Data')
     {
@@ -436,7 +437,6 @@ class ControllerBase extends Controller
                 $columns[] = $columnMap[$field];
             }
         }
-
         return $columns;
     }
 }

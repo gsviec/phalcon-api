@@ -8,6 +8,7 @@ class JsonResponse extends Response
     /**
      * @param array $data
      *
+     * @return int|Response
      */
     public function json($data = [])
     {
@@ -43,10 +44,11 @@ class JsonResponse extends Response
                 break;
             case 'application/x-yaml':
                 $contentType = 'application/x-yaml';
+                $content = $data;
                 break;
             default:
+                $content = json_encode($data);
                 $contentType = 'application/json';
-
         }
         $this->setContentType($contentType, 'UTF-8');
         $this->setContent($content)->send();
