@@ -12,6 +12,7 @@ class JsonResponse extends Response
      */
     public function json($data = [])
     {
+
         $this->setContentType('application/json', 'UTF-8');
         if (!is_array($data)) {
             return 0;
@@ -51,6 +52,6 @@ class JsonResponse extends Response
                 $contentType = 'application/json';
         }
         $this->setContentType($contentType, 'UTF-8');
-        $this->setContent($content)->send();
+        return $this->setContent($content);
     }
 }

@@ -1,5 +1,5 @@
 <?php
-defined('VERSION') || define('VERSION', 1);
+defined('VERSION') || define('VERSION', 'v1');
 
 return new \Phalcon\Config([
     'database' => [
