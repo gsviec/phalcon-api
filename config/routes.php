@@ -31,6 +31,7 @@ $tasks->addPut('/{id:[0-9]+}', ['action' => 'update']);
 $token = new Group(['controller' => 'token']);
 $token->setPrefix($prefix . 'token');
 $token->add('',['action' => 'index']);
+$token->addDelete('/{id}',['action' => 'delete']);
 
 //mount
 $router->mount($token);

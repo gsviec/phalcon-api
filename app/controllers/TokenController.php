@@ -2,16 +2,41 @@
 namespace App\Controllers;
 
 
+use App\Models\Installation;
+
 class TokenController extends ControllerBase
 {
 
     public function indexAction()
     {
+        $data = $this->parserDataRequest();
         if (!$this->request->isPost()) {
             return $this->errorForbidden();
         }
-        $data = $this->parserDataRequest();
-        d($data);
+        try {
+            $install = new Installation();
+            $install->insertOne($data);
+            return $this->respondWithSuccess();
+        } catch (\ErrorException $e) {
+            return $this->respondWithError($e->getMessage(),402);
+        }
+
     }
+    public function deleteAction($id)
+    {
+        $params['deviceToken'] = $id;
+
+        if (!$this->request->isDelete()) {
+            return $this->errorForbidden();
+        }
+        try {
+            $install = new Installation();
+            $install->deleteOne($params);
+            return $this->respondWithSuccess();
+        } catch (\ErrorException $e) {
+            return $this->respondWithError($e->getMessage(),402);
+        }
+    }
+
 
 }

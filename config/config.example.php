@@ -11,8 +11,7 @@ return new \Phalcon\Config([
         'charset'     => 'utf8',
     ],
     'mongodb' => [
-        'uri'     => '"mongodb://root:password@localhost/dev"',
-
+        'uri'     => 'mongodb://localhost:27017/dev',
     ],
     'app' => [
         'debug'=> true

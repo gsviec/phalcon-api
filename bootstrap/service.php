@@ -12,6 +12,7 @@ use Phalcon\Cache\Backend\Memcache;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Cache\Backend\Libmemcached;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
+use Phalcon\Mvc\Collection\Manager as CollectionManager;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Mvc\Dispatcher;
@@ -70,7 +71,7 @@ $di->set(
 $di->set(
     'collectionManager',
     function () {
-        return new Manager();
+        return new CollectionManager();
     }
 );
 $di->set(
@@ -103,7 +104,8 @@ $di->set(
 $di->setShared('mongo', function () {
     $config = $this->getConfig();
 
-    return new \MongoDB\Client($config->mongodb->uri);
+    $client = new \MongoDB\Client($config->mongodb->uri);
+    return $client->selectDatabase($config->mongodb->dbname);
 });
 
 $di->set(

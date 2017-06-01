@@ -178,13 +178,6 @@ class ControllerBase extends Controller
      */
     protected function respondWithError($message, $errorCode)
     {
-        if ($this->statusCode === 200) {
-            trigger_error(
-                "You better have a really good reason for erroring on a 200...",
-                E_USER_WARNING
-            );
-        }
-
         return $this->respondWithArray([
             'error' => [
                 'code' => $errorCode,
@@ -344,18 +337,13 @@ class ControllerBase extends Controller
         }
 
         if (0 == count($posts)) {
+            $posts = $this->request->getPost();
             if ($this->request->isPut()) {
-                //@todo paser data;
                 $posts = $this->request->getPut();
-            }
-            if ($this->request->isPost()) {
-                $posts = $this->request->getPost();
             }
         }
         return $posts;
     }
-
-
 
     /**
      * @param Dispatcher $dispatcher
