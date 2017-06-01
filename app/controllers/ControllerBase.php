@@ -337,7 +337,11 @@ class ControllerBase extends Controller
      */
     public function parserDataRequest()
     {
-        $posts = $this->request->getJsonRawBody(true);
+        if ($this->request->getHeader('CONTENT_TYPE') == 'application/json') {
+            $posts = $this->request->getJsonRawBody(true);
+        } else {
+            $posts = $this->request->getRawBody(true);
+        }
 
         if (0 == count($posts)) {
             if ($this->request->isPut()) {

@@ -10,6 +10,8 @@ class TokenController extends ControllerBase
         if (!$this->request->isPost()) {
             return $this->errorForbidden();
         }
+        $data = $this->parserDataRequest();
+        d($data);
     }
 
 }
