@@ -7,7 +7,7 @@ use Phalcon\Mvc\Collection;
 /**
  * Class ModelBase
  */
-class MongoBasel extends Collection
+class MongoBase extends Collection
 {
     public static function getBuilder()
     {
