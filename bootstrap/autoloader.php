@@ -21,6 +21,9 @@ require 'constants.php';
     ->registerNamespaces([
         
         'App'              => ROOT_DIR . '/core/',
+        'App\Models'       => ROOT_DIR . '/core/models/',
+        'App\Responses'    => ROOT_DIR . '/core/responses/',
+        'App\Transformer'  => ROOT_DIR . '/core/transformer/',
         'App\Controllers'  => ROOT_DIR . '/app/controllers/'
       
     ])

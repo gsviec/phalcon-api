@@ -20,12 +20,9 @@ $tests->addPut('/{id:[0-9]+}', ['action' => 'update']);
 
 
 //task
-$tasks = new Group(['controller' => 'task']);
-$tasks->setPrefix($prefix . 'tasks');
-$tasks->addGet('', ['action' => 'index']);
-$tasks->addGet('/{id:[0-9]+}', ['action' => 'view']);
-$tasks->addPost('/new', ['action' => 'new']);
-$tasks->addPut('/{id:[0-9]+}', ['action' => 'update']);
+$upload = new Group(['controller' => 'upload']);
+$upload->setPrefix($prefix . 'upload');
+$upload->addPost('', ['action' => 'index']);
 
 //token
 $token = new Group(['controller' => 'token']);
@@ -36,6 +33,6 @@ $token->addDelete('/{id}',['action' => 'delete']);
 //mount
 $router->mount($token);
 $router->mount($tests);
-$router->mount($tasks);
+$router->mount($upload);
 
 return $router;

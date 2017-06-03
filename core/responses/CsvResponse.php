@@ -1,5 +1,5 @@
 <?php
-namespace Phanbook\Responses;
+namespace App\Responses;
 
 use Phalcon\Http\Response;
 

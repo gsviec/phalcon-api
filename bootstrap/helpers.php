@@ -49,6 +49,18 @@ if (!function_exists('app_path')) {
         return ROOT_DIR . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 }
+if (!function_exists('public_path')) {
+    /**
+     * Get the Application path.
+     *
+     * @param  string $path
+     * @return string
+     */
+    function public_path($path = '')
+    {
+        return app_path('public') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+}
 
 if (!function_exists('config_path')) {
     /**
