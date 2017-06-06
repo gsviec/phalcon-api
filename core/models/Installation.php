@@ -27,7 +27,7 @@ class Installation extends MongoBase
     public function initialize()
     {
         $this->setSource("Installation");
-        $this->collection = $this->getDI()->get('mongo')->Installation;
+        $this->collection = $this->getDI()->get('mongo')->_Installation;
 
     }
     public static function getAll()
@@ -42,16 +42,22 @@ class Installation extends MongoBase
         ) {
             throw new \ErrorException('Need provide correct data!');
         }
-        $insertOneResult = $this->collection->insertOne([
-            'channels' => isset($data['channels']) ? $data['channels'] : [],
-            'deviceToken' => $data['deviceToken'],
-            'pushType' => $data['pushType'],
-            'deviceType' => $data['deviceType'],
-            'GCMSenderId' => $data['GCMSenderId'],
-            'installationId' => uniqid(true),
-            'appName' => 'Lackky'
-        ]);
-        return $insertOneResult;
+        $result = $this->collection->findOne(['deviceToken' => $data['deviceToken']]);
+        if (!$result) {
+            $result = $this->collection->insertOne([
+                'channels' => isset($data['channels']) ? $data['channels'] : [],
+                'deviceToken' => $data['deviceToken'],
+                'pushType' => $data['pushType'],
+                'deviceType' => $data['deviceType'],
+                'GCMSenderId' => $data['GCMSenderId'],
+                'installationId' => uniqid(true),
+                'appName' => 'Lackky'
+            ]);
+            return $result->getInsertedId();
+
+        }
+        return $result->_id;
+
     }
 
     public function deleteOne($data)

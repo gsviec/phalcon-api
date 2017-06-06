@@ -10,13 +10,12 @@ use Phalcon\Cache\Frontend\Data;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Cache\Backend\Memcache;
 use Phalcon\Translate\Adapter\Gettext;
-use Phalcon\Cache\Backend\Libmemcached;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
 use Phalcon\Mvc\Collection\Manager as CollectionManager;
-use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Mvc\Dispatcher;
 use App\Auth\OAuth;
+use MongoDB\Client as MClient;
 
 
 /**
@@ -104,7 +103,7 @@ $di->set(
 $di->setShared('mongo', function () {
     $config = $this->getConfig();
 
-    $client = new \MongoDB\Client($config->mongodb->uri);
+    $client = new MClient($config->mongodb->uri);
     return $client->selectDatabase($config->mongodb->dbname);
 });
 
