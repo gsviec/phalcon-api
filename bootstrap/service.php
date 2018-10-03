@@ -1,28 +1,12 @@
 <?php
-
-use Phalcon\DI;
-use Phalcon\Crypt;
 use Phalcon\Security;
-use Phalcon\Mvc\Router;
-use Phalcon\DI\FactoryDefault;
-use Phalcon\Http\Response\Cookies;
-use Phalcon\Cache\Frontend\Data;
 use Phalcon\Db\Adapter\Pdo\Mysql;
-use Phalcon\Cache\Backend\Memcache;
-use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
-use Phalcon\Mvc\Collection\Manager as CollectionManager;
-use Phalcon\Events\Manager as EventsManager;
-use Phalcon\Mvc\Dispatcher;
-use App\Auth\OAuth;
-use MongoDB\Client as MClient;
-
-
+use Phalcon\Logger\Adapter\File as FileAdapter;
 /**
  * The FactoryDefault Dependency Injector automatically
  * register the right services providing a full stack framework
  */
-$di = new FactoryDefault();
 
 /**
  * Register the configuration itself as a service
@@ -36,43 +20,6 @@ if (file_exists(config_path('/config.' . APPLICATION_ENV . '.php'))) {
 
 $di->set('config', $config, true);
 
-//setup timezone
-//date_default_timezone_set($di->get('config')->application->timezone ?: 'UTC');
-
-/**
- * Router
- */
-$di->set(
-    'router',
-    function () {
-        return include config_path('routes.php');
-    },
-    true
-);
-
-$di->set(
-    'dispatcher',
-    function () use ($di) {
-        $eventsManager = new EventsManager;
-        //$eventsManager->attach('dispatch', new Acl());
-        //$eventsManager->attach('dispatch:beforeException', new NotFoundPlugin);
-        $dispatcher = new Dispatcher;
-        $dispatcher->setEventsManager($eventsManager);
-        $dispatcher->setDefaultNamespace('App\\Controllers');
-        return $dispatcher;
-    }
-);
-
-/**
- * This service controls the initialization of models, keeping record of relations
- * between the different models of the application.
- */
-$di->set(
-    'collectionManager',
-    function () {
-        return new CollectionManager();
-    }
-);
 $di->set(
     'modelsManager',
     function () {
@@ -100,23 +47,6 @@ $di->set(
     true // shared
 );
 
-$di->setShared('mongo', function () {
-    $config = $this->getConfig();
-
-    $client = new MClient($config->mongodb->uri);
-    return $client->selectDatabase($config->mongodb->dbname);
-});
-
-$di->set(
-    'cookies',
-    function () {
-        $cookies = new Cookies();
-        $cookies->useEncryption(false);
-        return $cookies;
-    },
-    true
-);
-
 $di->set(
     'security',
     function () {
@@ -129,44 +59,14 @@ $di->set(
     },
     true
 );
-
-//Set the models cache service
+/**
+ * The logger component
+ */
 $di->set(
-    'modelsCache',
-    function () {
-
-        //Cache data for one day by default
-        $frontCache = new Data(
-            array(
-            "lifetime" => 86400
-            )
-        );
-
-        //Memcached connection settings
-        $cache = new Memcache(
-            $frontCache,
-            array(
-            "host" => "localhost",
-            "port" => "11211"
-            )
-        );
-
-        return $cache;
-    }
-);
-
-//Oauth
-$di->set(
-    'oauth',
-    function () {
-        $oauth = new OAuth();
-        return $oauth;
-
+    'logger',
+    function () use ($di) {
+        $logger = app_path('logs/') . date('Y-m-d') . '.log';
+        return new FileAdapter($logger, ['model' => 'a+']);
     },
     true
 );
-
-//Phalcon Debugger
-if ($config->app->debug) {
-    (new \Phalcon\Debug)->listen();
-}
