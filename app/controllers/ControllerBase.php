@@ -13,8 +13,6 @@ use League\Fractal\Pagination\Cursor;
 use App\Responses\JsonResponse;
 use App\Models\ModelBase;
 use League\Fractal\Pagination\PhalconFrameworkPaginatorAdapter;
-use App\Auth\Request as OAuth2Request;
-
 
 /**
  * Class ControllerBase
@@ -178,6 +176,7 @@ class ControllerBase extends Controller
      */
     protected function respondWithError($message, $errorCode)
     {
+        $this->logger->error($message);
         return $this->respondWithArray([
             'error' => [
                 'code' => $errorCode,
@@ -274,7 +273,7 @@ class ControllerBase extends Controller
                 'limit' => $perPage,
                 'page' => $page
             ]);
-        } elseif(isset($query['model'])) {
+        } elseif (isset($query['model'])) {
             $builder  = ModelBase::modelQuery($query);
             $paginator  = new PaginatorQueryBuilder(
                 [
@@ -284,7 +283,6 @@ class ControllerBase extends Controller
                 ]
             );
         } else {
-
             $paginator = new PaginatorNativeArray([
                 'data' => $query,
                 'limit' => $perPage,
@@ -313,7 +311,7 @@ class ControllerBase extends Controller
     public function getParameter()
     {
         $query  = $this->request->getQuery();
-        $query  = array_filter($query, function($val){
+        $query  = array_filter($query, function ($val) {
             return !empty($val);
         });
         //define the fields required for a partial response.
@@ -383,6 +381,18 @@ class ControllerBase extends Controller
         //     $this->errorUnauthorized();
         //     exit;
         // }
+//        var_dump(111);
+//
+//
+//        $token = $this->request->get('access_token');
+//        $header = $this->request->getHeaders();
+//        $this->respondWithError($header['Token']);
+//        //d($header);
+//        exit(1);
+//        if (!isset($token)) {
+//            //$this->errorUnauthorized();
+//            //exit(1);
+//        }
     }
 
     /**
@@ -398,11 +408,11 @@ class ControllerBase extends Controller
         $bind = [];
 
         // Loop through each URL parameter and build the sql where queries
-        foreach($config as $confKey => $confValue) {
+        foreach ($config as $confKey => $confValue) {
             // Avoid the private _url field
-            if(substr($confKey, 0, 1) != '_') {
+            if (substr($confKey, 0, 1) != '_') {
                 // If this field has a value in our API Config, we know it is a genuine column in the database
-                if(isset($columnMap[$confKey]) !== false) {
+                if (isset($columnMap[$confKey]) !== false) {
                     $where[] = "$columnMap[$confKey] = :$confKey";
                     $bind[$confKey] = $confValue;
                 }
@@ -423,9 +433,9 @@ class ControllerBase extends Controller
     {
         $columns = [];
         // If the user only wants some fields returned, get the private columns and pass onto our sql query
-        if(isset($config['fields'])) {
+        if (isset($config['fields'])) {
             $fields = $config['fields'];
-            foreach($fields as $field) {
+            foreach ($fields as $field) {
                 $columns[] = $columnMap[$field];
             }
         }

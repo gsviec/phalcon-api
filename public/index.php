@@ -1,16 +1,11 @@
 <?php
-use Phalcon\Mvc\Application;
-
 // Register the auto loader
 require __DIR__.'/../bootstrap/autoloader.php';
-
 try {
 
-    require app_path('bootstrap/service.php');
+    require app_path('bootstrap/service.api.php');
 
     $router = $di->getRouter();
-
-    
     $router->handle();
 
     // Pass the processed router parameters to the dispatcher
@@ -28,7 +23,11 @@ try {
         $response->send();
     }
 } catch (Exception $e) {
-    echo $e->getMessage();
-    d($e->getTraceAsString());
+    if (ENV_PRODUCTION === APPLICATION_ENV) {
+        $di->get('logger')->error($e->getMessage());
+    } else {
+        echo $e->getMessage();
+        d($e->getTraceAsString());
+    }
 }
 
