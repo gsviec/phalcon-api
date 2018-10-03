@@ -41,5 +41,9 @@ return new \Phalcon\Config([
     'slack' => [
         'channel' => 'lackky_dev',
         'token' => ''
-    ]
+    ],
+     'mongodb' => [
+        'uri'     => 'mongodb://localhost:27017/lackky_live',
+    ],
+
 ]);
