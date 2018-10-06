@@ -3,6 +3,8 @@ use Phalcon\Security;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
 use Phalcon\Logger\Adapter\File as FileAdapter;
+use MongoDB\Client as MClient;
+
 /**
  * The FactoryDefault Dependency Injector automatically
  * register the right services providing a full stack framework
@@ -70,3 +72,10 @@ $di->set(
     },
     true
 );
+
+$di->setShared('mongo', function () {
+    $config = $this->getConfig();
+
+    $client = new MClient($config->mongodb->uri);
+    return $client->selectDatabase($config->mongodb->dbname);
+});
